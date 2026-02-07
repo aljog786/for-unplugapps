@@ -2,9 +2,21 @@ import React from 'react';
 
 const ButtonsSection = () => {
   return (
-    <div className="flex gap-4 mt-6">
-      <button className="px-4 py-2 bg-blue-600 text-white rounded">Action 1</button>
-      <button className="px-4 py-2 border border-gray-300 rounded">Action 2</button>
+    <div className="mt-6 flex justify-end">
+      <div className="flex w-full max-w-[160px] flex-col gap-3 rounded-2xl border border-yellow-200 bg-gradient-to-b from-yellow-100 to-yellow-200 p-4 shadow-md">
+        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+          New
+        </button>
+        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+          Insert
+        </button>
+        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+          Save
+        </button>
+        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+          Print
+        </button>
+      </div>
     </div>
   );
 };
