@@ -1,19 +1,39 @@
-import React from 'react';
+'use client'
+import { useState } from "react";
 
-const ButtonsSection = () => {
+interface ButtonsSectionProps {
+  onInsert?: () => void;
+}
+
+const ButtonsSection = ({ onInsert }: ButtonsSectionProps) => {
+  const [count, setCount] = useState(0);
+  const newClickHandler = () => {
+    setCount(prev => prev + 1);
+    console.log("New button clicked ", count)
+  }
+  const insertClickHandler = () => {
+    console.log("insert button clicked")
+    if (onInsert) onInsert();
+  }
+  const saveClickHandler = () => {
+    console.log("save button clicked")
+  }
+  const printClickHandler = () => {
+    console.log("print button clicked")
+  }
   return (
     <div className="mt-6 flex justify-end">
-      <div className="flex w-full max-w-[160px] flex-col gap-3 rounded-2xl border border-yellow-200 bg-gradient-to-b from-yellow-100 to-yellow-200 p-4 shadow-md">
-        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+      <div className="flex w-full max-w-[160px] flex-col gap-3 rounded-2xl border border-yellow-200 bg-linear-to-b from-yellow-100 to-yellow-200 p-4 shadow-md">
+        <button onClick={() => newClickHandler()} className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
           New
         </button>
-        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+        <button onClick={() => insertClickHandler()} className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
           Insert
         </button>
-        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+        <button onClick={() => saveClickHandler()} className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
           Save
         </button>
-        <button className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+        <button onClick={() => printClickHandler()} className="rounded-lg border border-yellow-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300">
           Print
         </button>
       </div>

@@ -1,92 +1,80 @@
 'use client'
-import { useState } from "react";
+import { useForm } from "../hooks/useForm";
+import { InputField, SelectField } from "./ui/FormControls";
 
-const HeaderSection = () => {
-    const [headerData, setHeaderData] = useState({
+interface HeaderSectionProps {
+  totalAmount?: number;
+}
+
+const HeaderSection = ({ totalAmount }: HeaderSectionProps) => {
+  const { data: headerData, handleChange } = useForm({
     vrNo: "",
     vrDate: "",
     status: "A",
     acName: "",
-    acAmt: "",
   });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setHeaderData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   return (
     <header className="mb-8">
-      <h1 className="text-4xl font-bold text-center bg-yellow-300 py-3 mb-6">
+      <h1 className="text-4xl font-bold text-center bg-yellow-300 py-3 mb-6 uppercase tracking-wider shadow-sm rounded-lg">
         Header
       </h1>
 
-      <form className="flex flex-col items-center gap-6">
-        <fieldset className="flex gap-6">
-          <div className="flex items-center gap-2">
-            <label htmlFor="vrNo">Vr no:</label>
-            <input
-              id="vrNo"
-              name="vrNo"
-              type="text"
-              value={headerData.vrNo}
-              onChange={handleChange}
-              className="border rounded px-2 py-1"
-            />
-          </div>
+      <form className="flex flex-col items-center gap-6 bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+        <fieldset className="flex flex-wrap justify-center gap-6">
+          <InputField
+            label="Vr no:"
+            id="vrNo"
+            name="vrNo"
+            type="text"
+            value={headerData.vrNo}
+            onChange={handleChange}
+            className="w-32"
+          />
 
-          <div className="flex items-center gap-2">
-            <label htmlFor="vrDate">Vr date:</label>
-            <input
-              id="vrDate"
-              name="vrDate"
-              type="date"
-              value={headerData.vrDate}
-              onChange={handleChange}
-              className="border rounded px-2 py-1"
-            />
-          </div>
+          <InputField
+            label="Vr date:"
+            id="vrDate"
+            name="vrDate"
+            type="date"
+            value={headerData.vrDate}
+            onChange={handleChange}
+          />
 
-          <div className="flex items-center gap-2">
-            <label htmlFor="status">Status:</label>
-            <input
-              id="status"
-              name="status"
-              type="text"
-              value={headerData.status}
-              readOnly
-              className="border rounded px-2 py-1 w-12 text-center bg-gray-100"
-            />
-          </div>
+          <SelectField
+            label="Status:"
+            id="status"
+            name="status"
+            value={headerData.status}
+            onChange={handleChange}
+            className="w-24"
+            options={[
+              { value: "A", label: "A" },
+              { value: "I", label: "I" }
+            ]}
+          />
         </fieldset>
 
-        <fieldset className="flex gap-6">
-          <div className="flex items-center gap-2">
-            <label htmlFor="acName">A/c name:</label>
-            <input
-              id="acName"
-              name="acName"
-              type="text"
-              value={headerData.acName}
-              onChange={handleChange}
-              className="border rounded px-2 py-1"
-            />
-          </div>
+        <fieldset className="flex flex-wrap justify-center gap-6">
+          <InputField
+            label="A/c name:"
+            id="acName"
+            name="acName"
+            type="text"
+            value={headerData.acName}
+            onChange={handleChange}
+            className="w-64"
+          />
 
-          <div className="flex items-center gap-2">
-            <label htmlFor="acAmt">A/c amt:</label>
-            <input
-              id="acAmt"
-              name="acAmt"
-              type="text"
-              value={headerData.acAmt}
-              onChange={handleChange}
-              className="border rounded px-2 py-1"
-            />
-          </div>
+          <InputField
+            label="A/c amt:"
+            id="acAmt"
+            name="acAmt"
+            type="text"
+            value={totalAmount?.toFixed(2) || "0.00"}
+            readOnly
+            className="w-32 bg-slate-50 font-semibold text-slate-900"
+          />
         </fieldset>
       </form>
     </header>
