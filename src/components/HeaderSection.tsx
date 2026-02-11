@@ -1,18 +1,12 @@
 'use client'
-import { useForm } from "../hooks/useForm";
+import { HeaderSectionProps } from "../types";
 import { InputField, SelectField } from "./ui/FormControls";
 
-interface HeaderSectionProps {
-  totalAmount?: number;
-}
-
-const HeaderSection = ({ totalAmount }: HeaderSectionProps) => {
-  const { data: headerData, handleChange } = useForm({
-    vrNo: "",
-    vrDate: "",
-    status: "A",
-    acName: "",
-  });
+const HeaderSection = ({ totalAmount, data, onChange }: HeaderSectionProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    onChange({ [name]: type === 'number' ? Number(value) : value });
+  };
 
   return (
     <header className="mb-8">
@@ -27,9 +21,10 @@ const HeaderSection = ({ totalAmount }: HeaderSectionProps) => {
             id="vrNo"
             name="vrNo"
             type="text"
-            value={headerData.vrNo}
+            value={data.vrNo}
             onChange={handleChange}
             className="w-32"
+            required
           />
 
           <InputField
@@ -37,15 +32,16 @@ const HeaderSection = ({ totalAmount }: HeaderSectionProps) => {
             id="vrDate"
             name="vrDate"
             type="date"
-            value={headerData.vrDate}
+            value={data.vrDate}
             onChange={handleChange}
+            required
           />
 
           <SelectField
             label="Status:"
             id="status"
             name="status"
-            value={headerData.status}
+            value={data.status}
             onChange={handleChange}
             className="w-24"
             options={[
@@ -61,9 +57,10 @@ const HeaderSection = ({ totalAmount }: HeaderSectionProps) => {
             id="acName"
             name="acName"
             type="text"
-            value={headerData.acName}
+            value={data.acName}
             onChange={handleChange}
             className="w-64"
+            required
           />
 
           <InputField
@@ -74,6 +71,7 @@ const HeaderSection = ({ totalAmount }: HeaderSectionProps) => {
             value={totalAmount?.toFixed(2) || "0.00"}
             readOnly
             className="w-32 bg-slate-50 font-semibold text-slate-900"
+            required
           />
         </fieldset>
       </form>

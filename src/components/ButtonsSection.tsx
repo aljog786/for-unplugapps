@@ -1,15 +1,9 @@
 'use client'
-import { useState } from "react";
+import { ButtonsSectionProps } from "../types";
 
-interface ButtonsSectionProps {
-  onInsert?: () => void;
-}
-
-const ButtonsSection = ({ onInsert }: ButtonsSectionProps) => {
-  const [count, setCount] = useState(0);
+const ButtonsSection = ({ onInsert, onSave, onPrint }: ButtonsSectionProps) => {
   const newClickHandler = () => {
-    setCount(prev => prev + 1);
-    console.log("New button clicked ", count)
+    console.log("new button clicked")
   }
   const insertClickHandler = () => {
     console.log("insert button clicked")
@@ -17,9 +11,11 @@ const ButtonsSection = ({ onInsert }: ButtonsSectionProps) => {
   }
   const saveClickHandler = () => {
     console.log("save button clicked")
+    if (onSave) onSave();
   }
   const printClickHandler = () => {
     console.log("print button clicked")
+    if (onPrint) onPrint();
   }
   return (
     <div className="mt-6 flex justify-end">
