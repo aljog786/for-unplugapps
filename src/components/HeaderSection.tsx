@@ -1,11 +1,17 @@
-'use client'
-import { HeaderSectionProps } from "../types";
+import { HeaderSectionProps, HeaderData } from "../types";
 import { InputField, SelectField } from "./ui/FormControls";
+import { useAppDispatch } from "../store/store";
+import { setHeaderField } from "../store/salesSlice";
 
-const HeaderSection = ({ totalAmount, data, onChange }: HeaderSectionProps) => {
+const HeaderSection = ({ totalAmount, data }: Omit<HeaderSectionProps, 'onChange'>) => {
+  const dispatch = useAppDispatch();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    onChange({ [name]: type === 'number' ? Number(value) : value });
+    dispatch(setHeaderField({
+      field: name as keyof HeaderData,
+      value: type === 'number' ? Number(value) : value
+    }));
   };
 
   return (

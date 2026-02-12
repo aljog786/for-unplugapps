@@ -1,37 +1,18 @@
-'use client'
 import { DetailsSectionProps, DetailRow, Item } from '../types';
 import { InputField } from './ui/FormControls';
 import ItemAutocomplete from './ui/ItemAutocomplete';
+import { useAppDispatch } from '../store/store';
+import { updateRowField, updateRowFromItem } from '../store/salesSlice';
 
-const DetailsSection = ({ rows, setRows, onRemoveRow }: DetailsSectionProps) => {
+const DetailsSection = ({ rows, onRemoveRow }: Omit<DetailsSectionProps, 'setRows'>) => {
+  const dispatch = useAppDispatch();
+
   const handleInputChange = (rowId: number, field: keyof DetailRow, value: string | number) => {
-    setRows(prev => prev.map(row => {
-      if (row.id === rowId) {
-        const updatedRow = { ...row, [field]: value };
-
-        if (field === 'qty' || field === 'rate') {
-          const qty = field === 'qty' ? Number(value) : row.qty;
-          const rate = field === 'rate' ? Number(value) : row.rate;
-          updatedRow.amt = qty * rate;
-        }
-
-        return updatedRow;
-      }
-      return row;
-    }));
+    dispatch(updateRowField({ id: rowId, field, value }));
   };
 
   const handleSelectItem = (rowId: number, item: Item) => {
-    setRows(prev => prev.map(row => {
-      if (row.id === rowId) {
-        return {
-          ...row,
-          itemCode: item.item_code,
-          itemName: item.item_name
-        };
-      }
-      return row;
-    }));
+    dispatch(updateRowFromItem({ id: rowId, itemCode: item.item_code, itemName: item.item_name }));
   };
 
   const totalAmount = rows.reduce((sum, row) => sum + row.amt, 0);
@@ -64,7 +45,6 @@ const DetailsSection = ({ rows, setRows, onRemoveRow }: DetailsSectionProps) => 
                     value={row.srNo}
                     readOnly
                     className="w-16 bg-slate-50 border-none text-center font-medium print:bg-white print:w-8"
-
                   />
                 </td>
                 <td className="px-6 py-4 print:px-2 print:py-2">
@@ -78,13 +58,12 @@ const DetailsSection = ({ rows, setRows, onRemoveRow }: DetailsSectionProps) => 
                   />
                 </td>
                 <td className="px-6 py-4 print:px-2 print:py-2">
-                  <ItemAutocomplete
+                  <InputField
+                    type="text"
                     value={row.itemName}
-                    field="item_name"
-                    placeholder="Enter item name"
-                    className="w-full min-w-[200px] print:min-w-[150px] print:border-none"
-                    onSelect={(item) => handleSelectItem(row.id, item)}
-                    onChange={(val) => handleInputChange(row.id, 'itemName', val)}
+                    readOnly
+                    placeholder="Item name"
+                    className="w-full min-w-[200px] bg-slate-50 border-none font-medium print:bg-white print:min-w-[150px]"
                   />
                 </td>
                 <td className="px-6 py-4 print:px-2 print:py-2">
@@ -122,7 +101,6 @@ const DetailsSection = ({ rows, setRows, onRemoveRow }: DetailsSectionProps) => 
                     value={row.amt}
                     readOnly
                     className="w-32 bg-slate-50 border-none text-right font-semibold text-slate-900 print:bg-white print:w-24"
-
                   />
                 </td>
                 {rows.length > 1 && <td className="px-6 py-4 print:hidden">
@@ -150,7 +128,6 @@ const DetailsSection = ({ rows, setRows, onRemoveRow }: DetailsSectionProps) => 
             readOnly
             className="w-56 bg-yellow-50 border-yellow-200 px-10 py-4 text-right text-2xl font-black text-slate-900 shadow-inner rounded-xl print:bg-white print:border-none print:text-xl print:w-32 print:px-6"
             value={totalAmount.toFixed(2)}
-
           />
         </div>
       </div>

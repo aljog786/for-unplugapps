@@ -19,7 +19,6 @@ export interface HeaderData {
 export interface HeaderSectionProps {
   totalAmount?: number;
   data: HeaderData;
-  onChange: (data: Partial<HeaderData>) => void;
 }
 
 export interface ButtonsSectionProps {
@@ -29,10 +28,8 @@ export interface ButtonsSectionProps {
   onPrint?: () => void;
 }
 
-
 export interface DetailsSectionProps {
   rows: DetailRow[];
-  setRows: React.Dispatch<React.SetStateAction<DetailRow[]>>;
   onRemoveRow: (id: number) => void;
 }
 
