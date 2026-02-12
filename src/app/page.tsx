@@ -19,6 +19,18 @@ export default function Home() {
 
   const totalAmount = rows.reduce((sum, row) => sum + row.amt, 0);
 
+  const resetData = useCallback(() => {
+    setHeaderData({
+      vrNo: 0,
+      vrDate: new Date().toISOString().split('T')[0],
+      status: "A",
+      acName: "",
+    });
+    setRows([
+      { id: 1, srNo: 1, itemCode: "", itemName: "", description: "", qty: 0, rate: 0, amt: 0 }
+    ]);
+  }, []);
+
   const addRow = useCallback(() => {
     setRows(prev => {
       const lastRow = prev[prev.length - 1];
@@ -135,7 +147,7 @@ export default function Home() {
           />
         </div>
         <div className="flex-none print:hidden">
-          <ButtonsSection onInsert={addRow} onSave={handleSave} onPrint={handlePrint} />
+          <ButtonsSection onNew={resetData} onInsert={addRow} onSave={handleSave} onPrint={handlePrint} />
         </div>
       </div>
       <div className="print:mt-4">

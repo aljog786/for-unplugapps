@@ -1,9 +1,10 @@
 'use client'
 import { ButtonsSectionProps } from "../types";
 
-const ButtonsSection = ({ onInsert, onSave, onPrint }: ButtonsSectionProps) => {
+const ButtonsSection = ({ onNew, onInsert, onSave, onPrint }: ButtonsSectionProps) => {
   const newClickHandler = () => {
     console.log("new button clicked")
+    if (onNew) onNew();
   }
   const insertClickHandler = () => {
     console.log("insert button clicked")

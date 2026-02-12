@@ -23,6 +23,7 @@ export interface HeaderSectionProps {
 }
 
 export interface ButtonsSectionProps {
+  onNew?: () => void;
   onInsert?: () => void;
   onSave?: () => void;
   onPrint?: () => void;
