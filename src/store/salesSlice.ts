@@ -27,7 +27,7 @@ const salesSlice = createSlice({
             action: PayloadAction<{ field: K; value: HeaderData[K] }>
         ) => {
             const { field, value } = action.payload;
-            (state.header as any)[field] = value;
+            state.header[field] = value;
         },
         setHeaderData: (state: SalesState, action: PayloadAction<HeaderData>) => {
             state.header = action.payload;
@@ -59,7 +59,7 @@ const salesSlice = createSlice({
             const { id, field, value } = action.payload;
             const row = state.rows.find((r: DetailRow) => r.id === id);
             if (row) {
-                (row as any)[field] = value;
+                row[field] = value;
                 if (field === 'qty' || field === 'rate') {
                     row.amt = Number(row.qty) * Number(row.rate);
                 }

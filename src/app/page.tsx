@@ -3,13 +3,12 @@ import { useCallback } from "react";
 import HeaderSection from "../components/HeaderSection";
 import DetailsSection from "../components/DetailsSection";
 import ButtonsSection from "../components/ButtonsSection";
-import { DetailRow, HeaderData } from "../types";
+import { DetailRow } from "../types";
 import { useAppDispatch, useAppSelector, RootState } from "../store/store";
 import {
   resetSales,
   addRow,
   removeRow,
-  setRows
 } from "../store/salesSlice";
 
 export default function Home() {
@@ -32,9 +31,14 @@ export default function Home() {
   }, [dispatch]);
 
   const handleSave = async () => {
-    // Basic validation
     if (!headerData.acName) {
       alert("A/c name is required");
+      return;
+    }
+
+    const vrNo = Number(headerData.vrNo);
+    if (!Number.isFinite(vrNo) || vrNo <= 0) {
+      alert("Vr no must be a valid number greater than 0");
       return;
     }
 
@@ -44,17 +48,24 @@ export default function Home() {
       return;
     }
 
-    // Construct payload
+    const toDDMMYYYY = (isoDate: string) => {
+      const parts = isoDate.split('-');
+      if (parts.length !== 3) return isoDate;
+      const [yyyy, mm, dd] = parts;
+      if (!yyyy || !mm || !dd) return isoDate;
+      return `${dd}-${mm}-${yyyy}`;
+    };
+
     const payload = {
       header_table: {
-        vr_no: Number(headerData.vrNo),
-        vr_date: headerData.vrDate,
+        vr_no: vrNo,
+        vr_date: toDDMMYYYY(headerData.vrDate),
         ac_name: headerData.acName,
         ac_amt: Number(totalAmount.toFixed(2)),
         status: headerData.status,
       },
       detail_table: rows.map((row: DetailRow) => ({
-        vr_no: Number(headerData.vrNo),
+        vr_no: vrNo,
         sr_no: Number(row.srNo),
         item_code: row.itemCode,
         item_name: row.itemName,
@@ -75,26 +86,21 @@ export default function Home() {
         body: JSON.stringify(payload),
       });
 
-      const contentType = response.headers.get("content-type");
-      let result;
-      try {
-        if (contentType && contentType.includes("application/json")) {
-          result = await response.json();
-        } else {
-          const text = await response.text();
-          result = { message: text };
-        }
-      } catch (parseError) {
-        console.error("Parse error:", parseError);
-        result = { message: "Error parsing server response" };
-      }
+      const rawBody = await response.text();
+      const contentType = response.headers.get("content-type") || "";
 
       if (response.ok) {
         alert('Data saved successfully!');
-        console.log("Save success:", result);
+        if (rawBody) {
+          try {
+            console.log("Save success:", contentType.includes('application/json') ? JSON.parse(rawBody) : rawBody);
+          } catch {
+            console.log("Save success:", rawBody);
+          }
+        }
       } else {
-        console.error("Save error details:", result);
-        alert(`Failed to save data: ${result.message || response.statusText || 'Internal Server Error'} `);
+        console.error("Save failed:", response.status, response.statusText, rawBody);
+        alert(`Failed to save data: ${rawBody || response.statusText || 'Internal Server Error'} `);
       }
     } catch (err) {
       console.error('Network error:', err);
