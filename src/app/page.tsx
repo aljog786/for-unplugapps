@@ -43,6 +43,7 @@ export default function Home() {
     }
 
     const invalidRow = rows.find((row: DetailRow) => !row.itemCode || !row.itemName || row.qty <= 0 || row.rate <= 0);
+    
     if (invalidRow) {
       alert(`Please fill all required fields for row ${invalidRow.srNo}`);
       return;
